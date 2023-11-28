@@ -16,6 +16,7 @@ class AppEncryptor {
     }
 
     decrypt(cipherText) {
+        cipherText = JSON.parse(cipherText);
         let iv = Buffer.from(cipherText.iv, 'hex');
         let decipher = crypto.createDecipheriv(this.algorithm, Buffer.from(this.key), iv);
         let decrypted = decipher.update(Buffer.from(cipherText.encryptedData, 'hex'));
