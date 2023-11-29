@@ -6,7 +6,6 @@ class AppEncryptor {
     algorithm = 'aes-256-cbc'
     iv = crypto.randomBytes(16);
     key = crypto.createHash('sha512').update(this.secretKey, 'utf-8').digest('hex').substr(0, 32);
-
     encrypt(plainText) {
         let cipher = crypto.createCipheriv(this.algorithm, this.key, this.iv);
         let encrypted = cipher.update(plainText);
@@ -14,7 +13,6 @@ class AppEncryptor {
         this.encryptionResult = { iv: this.iv.toString('hex'), encryptedData: encrypted.toString('hex') };
         this.encryptionResultConcat = ''.concat(this.encryptionResult.iv, this.encryptionResult.encryptedData);
     }
-
     decrypt(cipherText) {
         let iv = Buffer.from(cipherText.slice(0,32), 'hex');
         let decipher = crypto.createDecipheriv(this.algorithm, Buffer.from(this.key), iv);
