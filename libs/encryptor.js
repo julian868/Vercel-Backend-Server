@@ -1,9 +1,10 @@
 const crypto = require('crypto');
+
 class AppEncryptor {
     encryptionResult;
     encryptionResultConcat;
-    secretKey = "57bKEtwMFu/xa6P5QZFlns6ZQV2s1HVXJZWRxCAoIvpMo7cVToh07/zNklJLwB/E";
-    algorithm = 'aes-256-cbc'
+    secretKey = process.env.SECRET_KEY;
+    algorithm = process.env.ALGORITHM;
     iv = crypto.randomBytes(16);
     key = crypto.createHash('sha512').update(this.secretKey, 'utf-8').digest('hex').substr(0, 32);
     encrypt(plainText) {
@@ -14,7 +15,7 @@ class AppEncryptor {
         this.encryptionResultConcat = ''.concat(this.encryptionResult.iv, this.encryptionResult.encryptedData);
     }
     decrypt(cipherText) {
-        let iv = Buffer.from(cipherText.slice(0,32), 'hex');
+        let iv = Buffer.from(cipherText.slice(0, 32), 'hex');
         let decipher = crypto.createDecipheriv(this.algorithm, Buffer.from(this.key), iv);
         let decrypted = decipher.update(Buffer.from(cipherText.slice(32), 'hex'));
         decrypted = Buffer.concat([decrypted, decipher.final()]).toString();
